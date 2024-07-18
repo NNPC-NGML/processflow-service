@@ -3720,16 +3720,16 @@
         },
         {
             "name": "skillz/nnpcreusable",
-            "version": "v1.5.0",
+            "version": "v1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/NNPC-NGML/nnpcreuseable.git",
-                "reference": "bcbcb1d720091cfb4c64a630bd93c88cd73dd46b"
+                "reference": "5bb35b592696d61b7d8acaafb161b179e9dbeda4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/NNPC-NGML/nnpcreuseable/zipball/bcbcb1d720091cfb4c64a630bd93c88cd73dd46b",
-                "reference": "bcbcb1d720091cfb4c64a630bd93c88cd73dd46b",
+                "url": "https://api.github.com/repos/NNPC-NGML/nnpcreuseable/zipball/5bb35b592696d61b7d8acaafb161b179e9dbeda4",
+                "reference": "5bb35b592696d61b7d8acaafb161b179e9dbeda4",
                 "shasum": ""
             },
             "require": {
@@ -3762,9 +3762,9 @@
             "description": "nnpc reusable services",
             "support": {
                 "issues": "https://github.com/NNPC-NGML/nnpcreuseable/issues",
-                "source": "https://github.com/NNPC-NGML/nnpcreuseable/tree/v1.5.0"
+                "source": "https://github.com/NNPC-NGML/nnpcreuseable/tree/v1.5.1"
             },
-            "time": "2024-07-18T10:06:04+00:00"
+            "time": "2024-07-18T20:56:07+00:00"
         },
         {
             "name": "swagger-api/swagger-ui",
