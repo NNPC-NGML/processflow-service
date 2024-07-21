@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "skillz-systems/user-service": "dev-main",
+        "skillz/nnpcreusable": "^1.5",
         "vladimir-yuldashev/laravel-queue-rabbitmq": "^14.0"
     },
     "require-dev": {
@@ -28,7 +29,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-             "Skillz\\": "vendor/skillz-systems/user-service/src/"
+            "Skillz\\": "vendor/skillz-systems/user-service/src/"
         }
     },
     "autoload-dev": {
