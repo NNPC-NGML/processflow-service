@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Jobs\WorkflowHistory;
+namespace App\Jobs\ProcessFlowHistory;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use App\Service\ProcessFlowHistoryService;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
-class WorkflowHistoryCreated implements ShouldQueue
+class ProcessFlowHistoryUpdated implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-   /**
-     * The data for creating the workflowhistory.
+    /**
+     * The data for updating the workflowhistory.
      *
      * @var array
      */
@@ -31,10 +32,9 @@ class WorkflowHistoryCreated implements ShouldQueue
 
     public function handle(): void
     {
-
     }
 
-     public function getData(): array
+    public function getData(): array
     {
         return $this->data;
     }

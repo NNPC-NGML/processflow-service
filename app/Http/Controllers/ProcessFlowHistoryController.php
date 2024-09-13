@@ -4,42 +4,43 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Service\WorkflowHistoryService;
-use App\Http\Resources\WorkflowHistoryResource;
+use App\Service\ProcessFlowHistoryService;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\WorkflowHistoryCollection;
-use App\Http\Requests\StoreWorkflowHistoryRequest;
-use App\Jobs\WorkflowHistory\WorkflowHistoryCreated;
-use App\Jobs\WorkflowHistory\WorkflowHistoryDeleted;
-use App\Jobs\WorkflowHistory\WorkflowHistoryUpdated;
+use App\Http\Resources\ProcessFlowHistoryResource;
+use App\Http\Resources\ProcessFlowHistoryCollection;
+use App\Http\Requests\StoreProcessFlowHistoryRequest;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Jobs\ProcessFlowHistory\ProcessFlowHistoryCreated;
+use App\Jobs\ProcessFlowHistory\ProcessFlowHistoryDeleted;
+use App\Jobs\ProcessFlowHistory\ProcessFlowHistoryUpdated;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class WorkflowHistoryController extends Controller
+class ProcessFlowHistoryController extends Controller
 {
     /**
-     * The WorkflowHistoryService instance that will handle the business logic.
+     * The ProcessFlowHistoryService instance that will handle the business logic.
      *
      * The constructor injects the service into the controller so it can be used
      * in the controller methods.
      */
-    protected $workflowHistoryService;
+    protected $processFlowHistoryService;
 
-    public function __construct(WorkflowHistoryService $workflowHistoryService)
+    public function __construct(ProcessFlowHistoryService $processFlowHistoryService)
     {
-        $this->workflowHistoryService = $workflowHistoryService;
+        $this->processFlowHistoryService = $processFlowHistoryService;
     }
 
     /**
      * @OA\Get(
-     *     path="/workflowhistory",
-     *     summary="Fetch all workflow histories",
-     *     tags={"Workflow History"},
+     *     path="/processflowhistory",
+     *     summary="Fetch all processflow histories",
+     *     tags={"processflow History"},
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             type="array",
-     *             @OA\Items(ref="#/components/schemas/WorkflowHistoryResource")
+     *             @OA\Items(ref="#/components/schemas/ProcessFlowHistoryResource")
      *         )
      *     ),
      *     @OA\Response(
@@ -52,7 +53,7 @@ class WorkflowHistoryController extends Controller
      *     )
      * )
      *
-     * @param \App\Http\Requests\UpdateWorkflowHistoryRequest $request
+     * @param \App\Http\Requests\UpdateProcessFlowHistoryRequest $request
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
@@ -61,24 +62,24 @@ class WorkflowHistoryController extends Controller
 
     public function index()
     {
-        $workflowHistories = $this->workflowHistoryService->getWorkflowHistories();
-        return WorkflowHistoryResource::collection($workflowHistories);
+        $processFlowHistory = $this->processFlowHistoryService->getProcessFlowHistories();
+        return ProcessFlowHistoryResource::collection($processFlowHistory);
     }
 
 
     /**
      * @OA\Post(
-     *     path="/workflowhistory/create",
-     *     summary="Create a new workflow history",
-     *     tags={"Workflow History"},
+     *     path="/processflowhistory/create",
+     *     summary="Create a new processflow history",
+     *     tags={"processflow History"},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/StoreWorkflowHistoryRequest")
+     *         @OA\JsonContent(ref="#/components/schemas/StoreProcessFlowHistoryRequest")
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
-     *         @OA\JsonContent(ref="#/components/schemas/WorkflowHistoryResource")
+     *         @OA\JsonContent(ref="#/components/schemas/ProcessFlowHistoryResource")
      *     ),
      *     @OA\Response(
      *         response=422,
@@ -104,18 +105,18 @@ class WorkflowHistoryController extends Controller
      *     )
      * )
 
-     * @param StoreWorkflowHistoryRequest $request The request containing the workflow history data.
-     * @return WorkflowHistoryResource The created workflow history resource.
+     * @param StoreProcessFlowHistoryRequest $request The request containing the processflow history data.
+     * @return ProcessFlowHistoryResource The created processflow history resource.
 
      */
 
-    public function store(StoreWorkflowHistoryRequest $request)
+    public function store(StoreProcessFlowHistoryRequest $request)
     {
         return DB::transaction(function () use ($request) {
-            $storedWorkflowHistory = $this->workflowHistoryService->createWorkflowHistory($request);
+            $storedProcessFlowHistory = $this->processFlowHistoryService->createProcessFlowHistory($request);
 
-            WorkflowHistoryCreated::dispatch($storedWorkflowHistory->toArray());
-            return new WorkflowHistoryResource($storedWorkflowHistory);
+            ProcessFlowHistoryCreated::dispatch($storedProcessFlowHistory->toArray());
+            return new ProcessFlowHistoryResource($storedProcessFlowHistory);
         }, 5);
     }
 
@@ -123,17 +124,17 @@ class WorkflowHistoryController extends Controller
      * Display the specified resource.
      */
 
-     /**
+    /**
      * @OA\Get(
-     *     path="/workflowhistory/{id}",
-     *     summary="Fetch a workflow history",
-     *     tags={"Workflow History"},
+     *     path="/processflowhistory/{id}",
+     *     summary="Fetch a processflow history",
+     *     tags={"processflow History"},
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             type="array",
-     *             @OA\Items(ref="#/components/schemas/WorkflowHistoryResource")
+     *             @OA\Items(ref="#/components/schemas/ProcessFlowHistoryResource")
      *         )
      *     ),
      *     @OA\Response(
@@ -151,24 +152,24 @@ class WorkflowHistoryController extends Controller
      */
     public function show(string $id)
     {
-        $workflow = $this->workflowHistoryService->getWorkflowHistory($id);
-        return new WorkflowHistoryResource($workflow);
+        $processFlowHistory = $this->processFlowHistoryService->getProcessFlowHistory($id);
+        return new ProcessFlowHistoryResource($processFlowHistory);
     }
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-         WorkflowHistoryUpdated::dispatch($request->toArray());
+        ProcessFlowHistoryUpdated::dispatch($request->toArray());
     }
 
-/**
+    /**
      * @OA\Delete(
-     *      path="/workflowhistory/{id}",
-     *      operationId="deleteWorkflowHistory",
-     *      tags={"Workflow History"},
-     *      summary="Delete a workflow history",
-     *      description="Deletes a workflowhistory by its ID.",
+     *      path="/processflowhistory/{id}",
+     *      operationId="deleteprocessflowHistory",
+     *      tags={"processflow History"},
+     *      summary="Delete a processflow history",
+     *      description="Deletes a processflowhistory by its ID.",
      *      @OA\Parameter(
      *          name="id",
      *          in="path",
@@ -189,23 +190,22 @@ class WorkflowHistoryController extends Controller
      *      )
      * )
      *
-     * @param string $id The ID of the workflow history to delete.
+     * @param string $id The ID of the processflow history to delete.
      *
      */
     public function destroy(string $id)
     {
         try {
-        $deleted = $this->workflowHistoryService->deleteWorkflowHistory($id);
+            $deleted = $this->processFlowHistoryService->deleteProcessFlowHistory($id);
         } catch (\Exception $e) {
-        throw $e;
+            throw $e;
         }
 
-    if ($deleted) {
-        WorkflowHistoryDeleted::dispatch($id);
-        return response()->noContent();
-    }
+        if ($deleted) {
+            ProcessFlowHistoryDeleted::dispatch($id);
+            return response()->noContent();
+        }
 
-    throw new NotFoundHttpException('Workflow history not found.');
-
+        throw new NotFoundHttpException('processflow history not found.');
     }
 }

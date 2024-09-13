@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UnitController;
@@ -7,7 +8,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\ProcessFlowController;
 use App\Http\Controllers\ProcessflowStepController;
-use App\Http\Controllers\WorkflowHistoryController;
+use App\Http\Controllers\ProcessFlowHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,10 +42,10 @@ Route::middleware('scope.user')->group(function () {
     Route::put('/processflows/{id}', [ProcessFlowController::class, 'update']);
     Route::delete('/processflows/{id}', [ProcessFlowController::class, 'destroy']);
 
-    Route::post('/workflowhistory/create', [WorkflowHistoryController::class, 'store']);
-    Route::get('/workflowhistory', [WorkflowHistoryController::class, 'index']);
-    Route::get('/workflowhistory/{id}', [WorkflowHistoryController::class, 'show']);
-    Route::delete('/workflowhistory/{id}', [WorkflowHistoryController::class, 'destroy']);
+    Route::post('/processflowhistory/create', [ProcessFlowHistoryController::class, 'store']);
+    Route::get('/processflowhistory', [ProcessFlowHistoryController::class, 'index']);
+    Route::get('/processflowhistory/{id}', [ProcessFlowHistoryController::class, 'show']);
+    Route::delete('/processflowhistory/{id}', [ProcessFlowHistoryController::class, 'destroy']);
 
     Route::post('processflowstep/create/{id}', [ProcessflowStepController::class, 'store']);
     Route::delete('processflowstep/delete/{id}', [ProcessflowStepController::class, 'destroy']);
@@ -73,7 +74,6 @@ Route::middleware('scope.user')->group(function () {
     Route::get('/departments', [DepartmentController::class,  'index']);
     Route::get('/departments/{id}', [DepartmentController::class,  'show']);
     Route::get('/department_units/{id}', [DepartmentController::class,  'department_units']);
-
 });
 
 
