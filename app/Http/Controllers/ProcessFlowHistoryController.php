@@ -74,17 +74,17 @@ class ProcessFlowHistoryController extends Controller
      *     tags={"processflow History"},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/StoreProcessFlowHistoryRequest")
+     *         @OA\Items(ref="#/components/schemas/StoreProcessFlowHistoryRequest")
      *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
-     *         @OA\JsonContent(ref="#/components/schemas/ProcessFlowHistoryResource")
+     *         @OA\Items(ref="#/components/schemas/ProcessFlowHistoryResource")
      *     ),
      *     @OA\Response(
      *         response=422,
      *         description="Validation error",
-     *         @OA\JsonContent(
+     *         @OA\Items(
      *             @OA\Property(
      *                 property="message",
      *                 type="string",
