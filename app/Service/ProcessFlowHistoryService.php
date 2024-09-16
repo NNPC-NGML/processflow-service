@@ -40,14 +40,9 @@ class ProcessFlowHistoryService
         $model = new ProcessFlowHistory();
 
         $validator = Validator::make($request->all(), [
-            "task_id" => "required",
             "step_id" => "required",
             "process_flow_id" => "required",
             "user_id" => "required",
-            "for" => "required",
-            "for_id" => "required",
-            "approval" => "required",
-            "status" => "required",
         ]);
 
         if ($validator->fails()) {
