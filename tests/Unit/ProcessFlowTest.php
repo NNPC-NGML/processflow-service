@@ -47,7 +47,6 @@ class ProcessFlowTest extends TestCase
         $this->assertIsArray($resultArray);
         $this->assertArrayHasKey('frequency', $resultArray);
         $this->assertArrayHasKey('frequency_for', $resultArray);
-
     }
 
     public function test_to_see_if_a_processflow_can_be_fetched(): void
@@ -68,7 +67,6 @@ class ProcessFlowTest extends TestCase
         $fetchService = $createNewProcessService->getProcessFlow($result->id);
         $this->assertEquals($fetchService->id, $result->id);
         $this->assertInstanceOf(ProcessFlow::class, $fetchService);
-
     }
 
     public function test_to_see_if_processflow_returns_a_content(): void
@@ -80,7 +78,6 @@ class ProcessFlowTest extends TestCase
         $createNewProcessService->getProcessFlow($id);
 
         $this->expectException(ModelNotFoundException::class);
-
     }
 
     public function test_to_see_if_an_existing_processflow_can_be_updated(): void
@@ -110,7 +107,6 @@ class ProcessFlowTest extends TestCase
 
         $createNewProcessService->updateProcessflow(1, $data);
         $this->expectExceptionMessage('Something went wrong.');
-
     }
 
     public function test_to_if_a_processflow_can_be_deleted()
@@ -132,7 +128,6 @@ class ProcessFlowTest extends TestCase
         // check ifit was removed fromthe db
         $this->assertDatabaseMissing("process_flows", ["name" => "Process Flow 1"]);
         $this->assertTrue($delete);
-
     }
 
     public function test_to_see_if_there_is_no_record_with_the_provided_id()
@@ -140,7 +135,20 @@ class ProcessFlowTest extends TestCase
         $createNewProcessService = new ProcessFlowService();
         $delete = $createNewProcessService->deleteProcessflow(5);
         $this->assertFalse($delete);
-
     }
 
+    public function test_to_see_if_all_processflow_can_be_fetched()
+    {
+        ProcessFlow::factory(5)->create(["status" => 1]);
+        $processFlowService = (new ProcessFlowService())->getAllProcessFlow();
+        $this->assertInstanceOf(ProcessFlow::class, $processFlowService[0]);
+        $this->assertEquals(5, count($processFlowService->toArray()));
+    }
+
+    public function test_only_routes_with_status_true_can_be_fetched()
+    {
+        ProcessFlow::factory(5)->create(["status" => 0]);
+        $processFlowService = (new ProcessFlowService())->getAllProcessFlow();
+        $this->assertEquals(0, count($processFlowService->toArray()));
+    }
 }

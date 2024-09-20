@@ -108,4 +108,15 @@ class ProcessflowStepService
         $processFlowStep->delete();
         return true;
     }
+
+    /**
+     * Retrieve all processflow with status set to true.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|\App\Models\ProcessFlowStep
+     */
+
+    public function getAllProcessFlowStep()
+    {
+        return (new ProcessFlowStep())->where(["status" => ProcessFlowStep::ACTIVE])->get();
+    }
 }

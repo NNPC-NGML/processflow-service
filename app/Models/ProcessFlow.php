@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class ProcessFlow extends Model
 {
     use HasFactory;
+
+    public const ACTIVE = 1;
     protected $fillable = [
         'name',
         'start_step_id',
@@ -27,5 +29,4 @@ class ProcessFlow extends Model
     {
         return $this->hasMany(ProcessFlowStep::class)->orderBy('id');
     }
-
 }

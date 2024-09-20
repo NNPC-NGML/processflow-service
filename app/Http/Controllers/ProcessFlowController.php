@@ -35,12 +35,36 @@ class ProcessFlowController extends Controller
         $this->processFlowService = $processFlowService;
         $this->processflowStepService = $processflowStepService;
     }
+
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *      path="/process-flows",
+     *      tags={"Process Flows"},
+     *      summary="Get all process flow",
+     *      description="Returns a list of all process flow",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              type="array",
+     *              @OA\Items(ref="#/components/schemas/ProcessFlowResource")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden",
+     *      )
+     * )
      */
+
     public function index()
     {
-        //
+        $data = $this->processFlowService->getAllProcessFlow();
+        return ProcessFlowResource::collection($data);
     }
 
     /**
@@ -116,7 +140,6 @@ class ProcessFlowController extends Controller
                     $next_step_id = $index === count($createdSteps) - 1 ? null : $createdSteps[$index + 1]->id;
                     $this->processflowStepService->updateProcessFlowStep(new Request(['process_flow_id' => $processFlowId, 'next_step_id' => $next_step_id]), $step->id);
                 }
-
             } else {
                 $storedProcessFlow = $this->processFlowService->createProcessFlow($request);
             }
@@ -210,7 +233,7 @@ class ProcessFlowController extends Controller
         return DB::transaction(function () use ($request, $id) {
             $storedProcessFlow = $this->processFlowService->updateProcessFlow($id, $request);
 
-             ProcessFlowUpdated::dispatch($storedProcessFlow->toArray());
+            ProcessFlowUpdated::dispatch($storedProcessFlow->toArray());
             return new ProcessFlowResource($storedProcessFlow);
         }, 5);
     }
@@ -256,7 +279,7 @@ class ProcessFlowController extends Controller
 
                 if ($this->processFlowService->getProcessFlow($id)) {
                     $this->processFlowService->deleteProcessflow($id);
-                     ProcessFlowDeleted::dispatch($id);
+                    ProcessFlowDeleted::dispatch($id);
                     return response()->noContent();
                 }
             }, 5); // Setting 5 seconds timeout
@@ -267,6 +290,5 @@ class ProcessFlowController extends Controller
 
             // return response()->json(['error' => 'Failed to delete process flow'], 500);
         }
-
     }
 }

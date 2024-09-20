@@ -99,6 +99,35 @@
             }
         },
         "/process-flows": {
+            "get": {
+                "tags": [
+                    "Process Flows"
+                ],
+                "summary": "Get all process flow",
+                "description": "Returns a list of all process flow",
+                "operationId": "977c94d1649a7412f9ed15078fb8b898",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProcessFlowResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
             "post": {
                 "tags": [
                     "Process Flows"
@@ -402,6 +431,37 @@
                     },
                     "404": {
                         "description": "Route not found"
+                    }
+                }
+            }
+        },
+        "/processflowstep": {
+            "get": {
+                "tags": [
+                    "Process Flow Steps"
+                ],
+                "summary": "Get all routes",
+                "description": "Returns a list of all process flow steps",
+                "operationId": "88227fe77313868dc82c031082625b88",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProcessFlowStepResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
                     }
                 }
             }
