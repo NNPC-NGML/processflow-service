@@ -45,8 +45,8 @@ class FormDataCreated implements ShouldQueue
         //!empty($this->data["form_builder_id"])
         //decode json data to php array 
         $data = [
-            "process_flow_id" => $this->data["data"]["form_builder"]["process_flow_id"],
-            "user_id" => $this->data["data"]["user_id"],
+            "process_flow_id" => $this->data["form_builder"]["process_flow_id"],
+            "user_id" => $this->data["user_id"],
         ];
         // if (!empty($this->data["data"]["form_field_answers"])) {
         //     $jsonStringConverted = json_decode($this->data["data"]["form_field_answers"], true);
@@ -56,9 +56,9 @@ class FormDataCreated implements ShouldQueue
         //     }
         // }
 
-        if (!empty($this->data["data"]["form_builder_id"]) && isset($this->data["data"]["form_builder"]["process_flow_id"])) {
+        if (!empty($this->data["form_builder_id"]) && isset($this->data["form_builder"]["process_flow_id"])) {
             // get process flow and use its first step 
-            $getProcessFlow = (new ProcessFlowService())->getProcessFlow((int) $this->data["data"]["form_builder"]["process_flow_id"]);
+            $getProcessFlow = (new ProcessFlowService())->getProcessFlow((int) $this->data["form_builder"]["process_flow_id"]);
             if ($getProcessFlow) {
                 // create process flow history from fetched process flow 
                 $data["step_id"] = $getProcessFlow->start_step_id;
@@ -66,11 +66,11 @@ class FormDataCreated implements ShouldQueue
                 $createNewHistory = (new ProcessFlowHistoryService())->createProcessFlowHistory($request);
                 if ($createNewHistory) {
                     $createNewHistory = $createNewHistory->toArray();
-                    $createNewHistory["formbuilder_data_id"] = $this->data["data"]["id"];
+                    $createNewHistory["formbuilder_data_id"] = $this->data["id"];
                     //$createNewHistory["process_flow_id"] = $this->data["data"]["form_builder"]["process_flow_id"];
                     $createNewHistory["processflow_step_id"] = $getProcessFlow->start_step_id; //$this->data["data"]["form_builder"]["process_flow_step_id"];
-                    $createNewHistory["user_id"] = $this->data["data"]["user_id"];
-                    $createNewHistory["form_builder_id"] = $this->data["data"]["form_builder"]["id"];
+                    $createNewHistory["user_id"] = $this->data["user_id"];
+                    $createNewHistory["form_builder_id"] = $this->data["form_builder"]["id"];
                     // dispatch process flow history created
                     ProcessFlowHistoryCreated::dispatch($createNewHistory);
                 }

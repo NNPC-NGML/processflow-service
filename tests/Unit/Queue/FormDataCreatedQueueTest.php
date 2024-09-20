@@ -20,20 +20,20 @@ class FormDataCreatedQueueTest extends TestCase
         $processFlow = ProcessFlow::factory()->create(["start_step_id" => 1]);
 
         $data = [
-            "data" => [
-                "form_builder_id" => 1,
+
+            "form_builder_id" => 1,
+            "id" => 1,
+            "user_id" => 1,
+            "form_builder" => [
                 "id" => 1,
-                "user_id" => 1,
-                "form_builder" => [
-                    "id" => 1,
-                    "process_flow_id" => $processFlow->id,
-                    "process_flow_step_id" => 1
-                ],
-                "form_field_answers" => json_encode([
-                    ["id" => 1, "elementType" => "text", "name" => "company_name", "placeholder" => "Enter company name", "key" => "test_q", "value" => $processFlow->id],
-                    ["id" => 1, "elementType" => "text", "name" => "company_name", "placeholder" => "Enter company name", "key" => "test_e", "value" => 1]
-                ])
-            ]
+                "process_flow_id" => $processFlow->id,
+                "process_flow_step_id" => 1
+            ],
+            "form_field_answers" => json_encode([
+                ["id" => 1, "elementType" => "text", "name" => "company_name", "placeholder" => "Enter company name", "key" => "test_q", "value" => $processFlow->id],
+                ["id" => 1, "elementType" => "text", "name" => "company_name", "placeholder" => "Enter company name", "key" => "test_e", "value" => 1]
+            ])
+
         ];
         $this->assertDatabaseEmpty("process_flow_histories");
         $job = new FormDataCreated($data);
