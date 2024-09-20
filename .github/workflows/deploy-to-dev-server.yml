@@ -1,6 +1,5 @@
 name: nnpc_processflow_deploy
-# on:
-#   push:
+
 on:
   # push:
   #   # branches:
@@ -32,7 +31,6 @@ jobs:
         run: |
           CI=false php artisan test
           echo "Exit code: $?"
-        
 
   deploy-processflow-dev:
     runs-on: ubuntu-latest
@@ -56,6 +54,7 @@ jobs:
 
       - name: Install rsync
         run: sudo apt-get install -y rsync
+
 
       - name: Find and replace nnpc reusable env variables
         run: |
@@ -118,6 +117,7 @@ jobs:
           sed -i -e "s:RABBITMQ_USER=forge:RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}:g" .env &&
           sed -i -e "s:RABBITMQ_PASSWORD=forge:RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }}:g" .env &&
           sed -i -e "s:RABBITMQ_VHOST=forge:RABBITMQ_VHOST=${{ secrets.RABBITMQ_VHOST }}:g" .env
+
       - name: SSH login
         run: |
           mkdir -p ~/.ssh

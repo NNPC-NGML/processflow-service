@@ -1,5 +1,4 @@
 name: automator-test
-
 on:
   push:
 
