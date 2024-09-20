@@ -2,15 +2,15 @@
 
 namespace App\Jobs\AutomatorTask;
 
-use App\Models\FormBuilder;
-use App\Services\FormService;
+use Illuminate\Http\Request;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Service\ProcessFlowHistoryService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Skillz\Nnpcreusable\Service\AutomatorTaskService;
+use App\Jobs\ProcessFlowHistory\ProcessFlowHistoryCreated;
 
 class AutomatorTaskUpdated implements ShouldQueue
 {
@@ -34,41 +34,34 @@ class AutomatorTaskUpdated implements ShouldQueue
 
     public function handle(): void
     {
-        // if "formbuilder_data_id" == null create a new form data and dispatch formdata created 
-        $this->data["process_flow_step_id"] = $this->data["processflow_step_id"];
-        $this->data["process_flow_history_id"] = $this->data["processflow_history_id"];
-        $this->data["automator_task_id"] = $this->data["id"];
+        $data = [
+            "task_id" => $this->data["id"],
+            "step_id" => $this->data["processflow_step_id"],
+            "process_flow_id" => $this->data["processflow_id"],
+            "user_id" => $this->data["user_id"],
+            "for" => $this->data["entity"],
+            "for_id" => $this->data["entity_id"],
+            "approval" => $this->data["task_status"],
+            "status" => $this->data["task_status"],
+        ];
 
-        unset($this->data["processflow_step_id"]);
-        unset($this->data["id"]);
-
-        if ($this->data["formbuilder_data_id"] == null) {
-            $formBuilderId = FormBuilder::where(["process_flow_step_id" => $this->data["process_flow_step_id"]])->first();
-            if ($formBuilderId) {
-                $this->data["form_builder_id"] = $formBuilderId->id;
-                $this->data["status"] = 0;
-                $createFormData = $this->formService()->createFormData($this->data);
-                if ($createFormData) {
-                    $this->formService()->dispatchFormData("create", $createFormData->id);
-                }
+        if ($this->data["processflow_history_id"] == null) {
+            $request = new Request($data);
+            $createNewHistory = (new ProcessFlowHistoryService())->createProcessFlowHistory($request);
+            if ($createNewHistory) {
+                $createNewHistory = $createNewHistory->toArray();
+                $createNewHistory["processflow_step_id"] = $createNewHistory['step_id'];
+                ProcessFlowHistoryCreated::dispatch($createNewHistory);
             }
         } else {
-            $this->data["id"] = $this->data["formbuilder_data_id"];
-            //get form data and update 
-            $this->data["status"] = 1;
-            $updateFormData = $this->formService()->updateFormData($this->data["id"], $this->data);
-            if ($updateFormData) {
-                $this->formService()->dispatchFormData("update", $this->data["id"]);
+            //get process flow history 
+            $history = (new ProcessFlowHistoryService())->getProcessFlowHistory((int) $this->data["processflow_history_id"]);
+            if ($history) {
+                // update history 
+                $request = new Request($data);
+                $updateHistory = (new ProcessFlowHistoryService())->updateProcessFlowHistory($request, (int) $this->data["processflow_history_id"]);
+                // log the data below to be sure it is working 
             }
         }
-
-        // $service = new AutomatorTaskService();
-        // $data = $this->data;
-        // $service->update($data, $this->id);
-    }
-
-    private function formService()
-    {
-        return new FormService();
     }
 }

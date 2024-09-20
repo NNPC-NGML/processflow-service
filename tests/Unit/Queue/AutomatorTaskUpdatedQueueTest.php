@@ -9,12 +9,12 @@ use App\Jobs\AutomatorTask\AutomatorTaskCreated;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 
-class AutomatorTaskCreatedQueueTest extends TestCase
+class AutomatorTaskUpdatedQueueTest extends TestCase
 {
 
     use RefreshDatabase;
 
-    public function test_process_flow_history_can_be_created_from_automator()
+    public function test_process_flow_history_can_be_created_from_automator_update()
     {
         $data = [
             "id" => 1,
@@ -44,7 +44,7 @@ class AutomatorTaskCreatedQueueTest extends TestCase
         ];
         $this->assertDatabaseHas("Process_flow_histories", $createdHistory);
     }
-    public function test_process_flow_history_can_be_updated_from_automator()
+    public function test_process_flow_history_can_be_updated_from_automator_update()
     {
         $processFlowHistory = ProcessFlowHistory::factory()->create([
             "task_id" => null,

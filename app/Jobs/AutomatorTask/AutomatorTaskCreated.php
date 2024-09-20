@@ -2,10 +2,7 @@
 
 namespace App\Jobs\AutomatorTask;
 
-// use App\Models\Designation;
-use App\Models\FormBuilder;
 use Illuminate\Http\Request;
-use App\Services\FormService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
@@ -13,7 +10,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use App\Service\ProcessFlowHistoryService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Skillz\Nnpcreusable\Service\AutomatorTaskService;
 use App\Jobs\ProcessFlowHistory\ProcessFlowHistoryCreated;
 
 class AutomatorTaskCreated implements ShouldQueue
