@@ -34,17 +34,16 @@ class ProcessflowStepController extends Controller
 
     /**
      * @OA\Get(
-     *      path="/routes",
-     *      operationId="getRoutes",
-     *      tags={"Routes"},
+     *      path="/processflowstep",
+     *      tags={"Process Flow Steps"},
      *      summary="Get all routes",
-     *      description="Returns a list of all routes",
+     *      description="Returns a list of all process flow steps",
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
      *          @OA\JsonContent(
      *              type="array",
-     *              @OA\Items(ref="#/components/schemas/RouteResource")
+     *              @OA\Items(ref="#/components/schemas/ProcessFlowStepResource")
      *          )
      *      ),
      *      @OA\Response(

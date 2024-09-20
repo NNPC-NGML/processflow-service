@@ -38,17 +38,16 @@ class ProcessFlowController extends Controller
 
     /**
      * @OA\Get(
-     *      path="/routes",
-     *      operationId="getRoutes",
-     *      tags={"Routes"},
-     *      summary="Get all routes",
-     *      description="Returns a list of all routes",
+     *      path="/process-flows",
+     *      tags={"Process Flows"},
+     *      summary="Get all process flow",
+     *      description="Returns a list of all process flow",
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",
      *          @OA\JsonContent(
      *              type="array",
-     *              @OA\Items(ref="#/components/schemas/RouteResource")
+     *              @OA\Items(ref="#/components/schemas/ProcessFlowResource")
      *          )
      *      ),
      *      @OA\Response(
