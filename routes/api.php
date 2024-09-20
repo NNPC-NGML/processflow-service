@@ -38,6 +38,7 @@ Route::middleware('scope.user')->group(function () {
     // Route::get('processflows/:id', [ProcessFlowController::class, 'show']);
 
     Route::post('/processflows', [ProcessFlowController::class, 'store']);
+    Route::get('/processflows', [ProcessFlowController::class, 'index']);
     Route::get('/processflows/{id}', [ProcessFlowController::class, 'show']);
     Route::put('/processflows/{id}', [ProcessFlowController::class, 'update']);
     Route::delete('/processflows/{id}', [ProcessFlowController::class, 'destroy']);
@@ -47,6 +48,7 @@ Route::middleware('scope.user')->group(function () {
     Route::get('/processflowhistory/{id}', [ProcessFlowHistoryController::class, 'show']);
     Route::delete('/processflowhistory/{id}', [ProcessFlowHistoryController::class, 'destroy']);
 
+    Route::get('processflowstep', [ProcessflowStepController::class, 'index']);
     Route::post('processflowstep/create/{id}', [ProcessflowStepController::class, 'store']);
     Route::delete('processflowstep/delete/{id}', [ProcessflowStepController::class, 'destroy']);
     Route::put('processflowstep/update/{id}', [ProcessflowStepController::class, 'update']);

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ProcessFlowStep extends Model
 {
     use HasFactory;
+    public const ACTIVE = 1;
     protected $fillable = [
         'name',
         'step_route',
@@ -25,7 +26,8 @@ class ProcessFlowStep extends Model
         'status',
     ];
 
-    public function process():BelongsTo{
+    public function process(): BelongsTo
+    {
         return $this->belongsTo(ProcessFlow::class);
     }
 }

@@ -33,11 +33,35 @@ class ProcessflowStepController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * @OA\Get(
+     *      path="/routes",
+     *      operationId="getRoutes",
+     *      tags={"Routes"},
+     *      summary="Get all routes",
+     *      description="Returns a list of all routes",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              type="array",
+     *              @OA\Items(ref="#/components/schemas/RouteResource")
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden",
+     *      )
+     * )
      */
+
     public function index()
     {
-        //
+        $data = $this->processflowStepService->getAllProcessFlowStep();
+        return ProcessFlowStepResource::collection($data);
     }
 
     /**
@@ -106,25 +130,20 @@ class ProcessflowStepController extends Controller
                 // create a new step
                 $requestData = new Request($value);
 
-                if ($createdStep = $this->processflowStepService->createProcessFlowStep($requestData)
-                ) {
+                if ($createdStep = $this->processflowStepService->createProcessFlowStep($requestData)) {
                     array_push($createdStepsId, $createdStep->id);
-
                 }
-
             }
             if ($getProcessflow->start_step_id < 1) {
                 // update processflow start step if here
                 $processflowData = new Request(["start_step_id" => $createdStepsId[0]]);
                 $this->processFlowService->updateProcessflow($id, $processflowData);
-
             } else {
                 // take the last step id and update the first one created
                 $model = new ProcessFlowStep();
                 $getStep = $model->where(["process_flow_id" => $id])->latest()->first();
                 $processflowStepData = new Request(["next_step_id" => $createdStepsId[0]]);
                 $this->processflowStepService->updateProcessFlowStep($processflowStepData, $getStep->id);
-
             }
 
             for ($i = 1; $i < count($createdStepsId) - 1; $i++) {
@@ -135,13 +154,10 @@ class ProcessflowStepController extends Controller
             DB::commit();
             ProcessflowStepCreated::dispatch($result->toArray());
             return new ProcessFlowResource($result);
-
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Something went wrong.");
-
         }
-
     }
 
     /**
@@ -193,11 +209,9 @@ class ProcessflowStepController extends Controller
                 return new ProcessFlowStepResource($getStep);
             }
             return response()->json(['status' => "error", "message" => "something went wrong"], 404);
-
         } catch (\Exception $e) {
             return response()->json(['status' => "error", "message" => "id is invalid"], 404);
         }
-
     }
 
     /**
@@ -288,7 +302,6 @@ class ProcessflowStepController extends Controller
             // update other steps
             for ($i = 1; $i < count($steps); $i++) {
                 $this->processflowStepService->updateProcessFlowStep(new Request($steps[$i]), $steps[$i]["id"]);
-
             }
             DB::commit();
             $result = $this->processflowStepService->getProcessFlowStep($id);
@@ -297,7 +310,6 @@ class ProcessflowStepController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception("Something went wrong.");
-
         }
     }
 
@@ -343,7 +355,7 @@ class ProcessflowStepController extends Controller
     public function destroy(string $id)
     {
         if ($this->processflowStepService->deleteProcessFlowStep($id)) {
-             ProcessflowStepDeleted::dispatch($id);
+            ProcessflowStepDeleted::dispatch($id);
             return response()->noContent();
         }
         return response()->json(["status" => "error", "message" => "Provided id does not match any record"]);

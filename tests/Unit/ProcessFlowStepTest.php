@@ -74,7 +74,6 @@ class ProcessFlowStepTest extends TestCase
         $this->assertIsArray($resultArray);
         $this->assertArrayHasKey('step_route', $resultArray);
         $this->assertArrayHasKey('step_type', $resultArray);
-
     }
 
     public function test_to_get_a_processflow_step_with_id(): void
@@ -101,7 +100,6 @@ class ProcessFlowStepTest extends TestCase
         $this->assertDatabaseCount('process_flow_steps', 1);
         $this->assertInstanceOf(ProcessFlowStep::class, $result);
         $this->assertEquals($getStep->id, $result->id);
-
     }
 
     public function test_to_returns_null_if_not_found_or_invalid_id_for_processflow_step(): void
@@ -110,7 +108,6 @@ class ProcessFlowStepTest extends TestCase
 
         $service = new ProcessFlowStepService();
         $foundStep = $service->getProcessFlowStep(999);
-
     }
 
     public function test_to_update_a_processflow_step_successfully(): void
@@ -124,7 +121,6 @@ class ProcessFlowStepTest extends TestCase
             "name" => "test name updated",
         ]);
         $this->assertInstanceOf(ProcessFlowStep::class, $update);
-
     }
 
     public function test_to_update_throws_exception__process_flow_step_for_error(): void
@@ -149,7 +145,6 @@ class ProcessFlowStepTest extends TestCase
 
         $this->assertDatabaseCount('process_flow_steps', 0);
         $this->assertTrue($delete);
-
     }
 
     public function test_to_throw_exception_or_error_if_processflow_step_not_found_or_invalid_id(): void
@@ -157,7 +152,20 @@ class ProcessFlowStepTest extends TestCase
         $this->expectException(\Exception::class);
         $service = new ProcessflowStepService();
         $delete = $service->deleteProcessFlowStep(0);
-
     }
 
+    public function test_to_see_if_all_process_flow_steps_can_be_fetched()
+    {
+        ProcessFlowStep::factory(5)->create(["status" => 1]);
+        $processFlowStepService = (new ProcessFlowStepService())->getAllProcessFlowStep();
+        $this->assertInstanceOf(ProcessFlowStep::class, $processFlowStepService[0]);
+        $this->assertEquals(5, count($processFlowStepService->toArray()));
+    }
+
+    public function test_only_routes_with_status_true_can_be_fetched()
+    {
+        ProcessFlowStep::factory(5)->create(["status" => 0]);
+        $processFlowStepService = (new ProcessFlowStepService())->getAllProcessFlowStep();
+        $this->assertEquals(0, count($processFlowStepService->toArray()));
+    }
 }

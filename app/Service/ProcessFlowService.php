@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Service;
 
 use App\Models\ProcessFlow;
@@ -34,7 +35,6 @@ class ProcessFlowService
         }
         //Create a new process flow and return true if successful, otherwise return false
         return ProcessFlow::create($request->all());
-
     }
 
     /**
@@ -55,7 +55,6 @@ class ProcessFlowService
         } catch (\Exception $e) {
             throw $e;
         }
-
     }
 
     /**
@@ -92,10 +91,8 @@ class ProcessFlowService
                 return $model;
             }
             throw new \Exception('Something went wrong.');
-
         }
         throw new \Exception('Something went wrong.');
-
     }
 
     /**
@@ -112,11 +109,19 @@ class ProcessFlowService
         if ($model) {
             if ($model->delete()) {
                 return true;
-
             }
-
         }
         return false;
+    }
 
+    /**
+     * Retrieve all processflow with status set to true.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|\App\Models\ProcessFlow
+     */
+
+    public function getAllProcessFlow()
+    {
+        return (new ProcessFlow())->where(["status" => ProcessFlow::ACTIVE])->get();
     }
 }
