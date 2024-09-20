@@ -5,9 +5,9 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class WorkflowHistoryResource extends JsonResource
+class ProcessFlowHistoryResource extends JsonResource
 {
-     /**
+    /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -16,7 +16,7 @@ class WorkflowHistoryResource extends JsonResource
 
     /**
      * @OA\Schema(
-     *     schema="WorkflowHistoryResource",
+     *     schema="ProcessFlowHistoryResource",
      *     @OA\Property(property="id", type="integer"),
      *     @OA\Property(property="user_id", type="integer"),
      *     @OA\Property(property="task_id", type="integer"),
@@ -34,7 +34,10 @@ class WorkflowHistoryResource extends JsonResource
             'task_id' => $this->task_id,
             'step_id' => $this->step_id,
             'process_flow_id' => $this->process_flow_id,
-            'status' => (boolean) $this->status,       
-        ];   
+            "for" => $this->for,
+            "for_id" => $this->for_id,
+            "approval" => $this->approval,
+            'status' => (bool) $this->status,
+        ];
     }
 }

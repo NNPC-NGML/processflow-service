@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Jobs\WorkflowHistory;
+namespace App\Jobs\FormData;
 
+use App\Services\FormService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class WorkflowHistoryCreated implements ShouldQueue
+class FormDataUpdated implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-   /**
-     * The data for creating the workflowhistory.
+    /**
+     * The data for creating the unit.
      *
      * @var array
      */
@@ -29,13 +30,13 @@ class WorkflowHistoryCreated implements ShouldQueue
         $this->data = $data;
     }
 
+    /**
+     * Execute the job.
+     *
+     * @param FormService $service
+     * @return void
+     */
     public function handle(): void
     {
-
-    }
-
-     public function getData(): array
-    {
-        return $this->data;
     }
 }

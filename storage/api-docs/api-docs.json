@@ -5,6 +5,99 @@
         "version": "0.1"
     },
     "paths": {
+        "/departments/{id}": {
+            "get": {
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Get a Department",
+                "description": "returns the details of a single Department",
+                "operationId": "8d8e7a213e3fdd9c2ab7a3297ddef213",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the department",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Unit found"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/department_units/{id}": {
+            "get": {
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Get a Department",
+                "description": "Returns the details of a single Department",
+                "operationId": "326c7b38924df5ef223546e90ae7a08e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the department",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Unit found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DepartmentUnitResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ]
+            }
+        },
         "/process-flows": {
             "post": {
                 "tags": [
@@ -204,6 +297,113 @@
                         "BearerAuth": []
                     }
                 ]
+            }
+        },
+        "/processflowhistory": {
+            "get": {
+                "tags": [
+                    "processflow History"
+                ],
+                "summary": "Fetch all processflow histories",
+                "operationId": "0ca1cf3ff71d62d5c4277c223dbb330b",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProcessFlowHistoryResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            }
+        },
+        "/processflowhistory/create": {
+            "post": {
+                "tags": [
+                    "processflow History"
+                ],
+                "summary": "Create a new processflow history",
+                "operationId": "b1221484d1cbd8eecfc45fd8c326204b",
+                "requestBody": {
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/processflowhistory/{id}": {
+            "get": {
+                "tags": [
+                    "processflow History"
+                ],
+                "summary": "Fetch a processflow history",
+                "operationId": "d2926d013ac09d2010aec24a9ec5ad2a",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProcessFlowHistoryResource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "processflow History"
+                ],
+                "summary": "Delete a processflow history",
+                "description": "Deletes a processflowhistory by its ID.",
+                "operationId": "deleteprocessflowHistory",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the route to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Route not found"
+                    }
+                }
             }
         },
         "/processflowstep/create/{id}": {
@@ -907,107 +1107,49 @@
                     }
                 }
             }
-        },
-        "/workflowhistory": {
-            "get": {
-                "tags": [
-                    "Workflow History"
-                ],
-                "summary": "Fetch all workflow histories",
-                "operationId": "637111010cf3c61d55f16c792671b23f",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/WorkflowHistoryResource"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized"
-                    },
-                    "404": {
-                        "description": "Not found"
-                    }
-                }
-            }
-        },
-        "/workflowhistory/create": {
-            "post": {
-                "tags": [
-                    "Workflow History"
-                ],
-                "summary": "Create a new workflow history",
-                "operationId": "157c2b881cf39b5ca3bb9f7bad858642",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/StoreWorkflowHistoryRequest"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/WorkflowHistoryResource"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "The given data was invalid."
-                                        },
-                                        "errors": {
-                                            "type": "object",
-                                            "example": {
-                                                "user_id": [
-                                                    "The user id field is required."
-                                                ],
-                                                "task_id": [
-                                                    "The task id field is required."
-                                                ],
-                                                "step_id": [
-                                                    "The step id field is required."
-                                                ],
-                                                "process_flow_id": [
-                                                    "The process flow id field is required."
-                                                ],
-                                                "status": [
-                                                    "The status field is required."
-                                                ]
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     },
     "components": {
         "schemas": {
+            "StoreWorkflowHistoryRequest": {
+                "title": "StoreWorkflowHistoryRequest",
+                "description": "Store Workflow History Request body data",
+                "required": [
+                    "user_id",
+                    "task_id",
+                    "step_id",
+                    "process_flow_id",
+                    "status"
+                ],
+                "properties": {
+                    "user_id": {
+                        "description": "User ID",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "task_id": {
+                        "description": "Task ID",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "step_id": {
+                        "description": "Step ID",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "process_flow_id": {
+                        "description": "Process Flow ID",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "status": {
+                        "description": "Status",
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
             "StoreProcessFlowRequest": {
                 "title": "StoreProcessFlowRequest",
                 "description": "Store process flow request body data",
@@ -1120,45 +1262,6 @@
                             "type": "object"
                         },
                         "nullable": true
-                    }
-                },
-                "type": "object"
-            },
-            "StoreWorkflowHistoryRequest": {
-                "title": "StoreWorkflowHistoryRequest",
-                "description": "Store Workflow History Request body data",
-                "required": [
-                    "user_id",
-                    "task_id",
-                    "step_id",
-                    "process_flow_id",
-                    "status"
-                ],
-                "properties": {
-                    "user_id": {
-                        "description": "User ID",
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "task_id": {
-                        "description": "Task ID",
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "step_id": {
-                        "description": "Step ID",
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "process_flow_id": {
-                        "description": "Process Flow ID",
-                        "type": "integer",
-                        "example": 1
-                    },
-                    "status": {
-                        "description": "Status",
-                        "type": "boolean",
-                        "example": true
                     }
                 },
                 "type": "object"
@@ -1285,6 +1388,28 @@
                 },
                 "type": "object"
             },
+            "DepartmentUnitResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "unit": {
+                        "$ref": "#/components/schemas/UnitResource"
+                    }
+                },
+                "type": "object"
+            },
             "DesignationResource": {
                 "properties": {
                     "id": {
@@ -1300,6 +1425,29 @@
                     "updated_at": {
                         "type": "string",
                         "format": "date"
+                    }
+                },
+                "type": "object"
+            },
+            "ProcessFlowHistoryResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "user_id": {
+                        "type": "integer"
+                    },
+                    "task_id": {
+                        "type": "integer"
+                    },
+                    "step_id": {
+                        "type": "integer"
+                    },
+                    "status": {
+                        "type": "integer"
+                    },
+                    "process_flow_id": {
+                        "type": "integer"
                     }
                 },
                 "type": "object"
@@ -1418,41 +1566,27 @@
                     }
                 },
                 "type": "object"
-            },
-            "WorkflowHistoryResource": {
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "user_id": {
-                        "type": "integer"
-                    },
-                    "task_id": {
-                        "type": "integer"
-                    },
-                    "step_id": {
-                        "type": "integer"
-                    },
-                    "status": {
-                        "type": "integer"
-                    },
-                    "process_flow_id": {
-                        "type": "integer"
-                    }
-                },
-                "type": "object"
             }
         }
     },
     "tags": [
         {
-            "name": "Designations"
+            "name": "Department"
         },
         {
             "name": "Process Flows"
         },
         {
-            "name": "Unit"
+            "name": "processflow History",
+            "description": "processflow History"
+        },
+        {
+            "name": "Process Flow Steps",
+            "description": "Process Flow Steps"
+        },
+        {
+            "name": "Routes",
+            "description": "Routes"
         }
     ]
 }

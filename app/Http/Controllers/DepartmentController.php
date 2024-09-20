@@ -8,6 +8,7 @@ use App\Http\Resources\DepartmentResource;
 use App\Http\Requests\StoreDepartmentRequest;
 use App\Http\Requests\UpdateDepartmentRequest;
 use App\Http\Resources\DepartmentUnitResource;
+
 /**
  * @OA\Tag(name="Department")
  */
@@ -15,13 +16,13 @@ use App\Http\Resources\DepartmentUnitResource;
 
 class DepartmentController extends Controller
 {
-   private DepartmentService $departmentService;
+    private DepartmentService $departmentService;
 
     public function __construct(DepartmentService $departmentService)
     {
         $this->departmentService = $departmentService;
     }
- /**
+    /**
      * @OA\Get(
      *     path="/departments",
      *     tags={"Department"},
@@ -81,12 +82,12 @@ class DepartmentController extends Controller
     }
 
 
-/**
+    /**
      * @OA\Get(
      *     path="/departments/{id}",
      *     tags={"Department"},
-     *     summary="Get a Department
-     *     description="Returns the details of a single Department",
+     *     summary="Get a Department",
+     *     description="returns the details of a single Department",
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
@@ -97,7 +98,8 @@ class DepartmentController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="Unit found",
-     *         @OA\JsonContent(ref="#/components/schemas/DepartmentResource")
+     *         @OA\Items(ref="#/components/schemas/DepartmentResource"),
+     *         
      *     ),
      * @OA\Response(
      *          response=400,
@@ -133,7 +135,7 @@ class DepartmentController extends Controller
      * @OA\Get(
      *     path="/department_units/{id}",
      *     tags={"Department"},
-     *     summary="Get a Department
+     *     summary="Get a Department",
      *     description="Returns the details of a single Department",
      *     @OA\Parameter(
      *         name="id",

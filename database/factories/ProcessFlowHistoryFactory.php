@@ -17,7 +17,15 @@ class ProcessFlowHistoryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => $this->faker->numberBetween(1, 10),
+            'task_id' => $this->faker->numberBetween(1, 10),
+            'step_id' => $this->faker->numberBetween(1, 10),
+            'process_flow_id' => $this->faker->numberBetween(1, 10),
+            'status' => $this->faker->boolean,
+            "for" => "customer",
+            "for_id" => $this->faker->numberBetween(1, 10),
+            "approval" => $this->faker->boolean,
+
         ];
     }
 }
