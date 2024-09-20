@@ -118,7 +118,6 @@ jobs:
           sed -i -e "s:RABBITMQ_USER=forge:RABBITMQ_USER=${{ secrets.RABBITMQ_USER }}:g" .env &&
           sed -i -e "s:RABBITMQ_PASSWORD=forge:RABBITMQ_PASSWORD=${{ secrets.RABBITMQ_PASSWORD }}:g" .env &&
           sed -i -e "s:RABBITMQ_VHOST=forge:RABBITMQ_VHOST=${{ secrets.RABBITMQ_VHOST }}:g" .env
-
       - name: SSH login
         run: |
           mkdir -p ~/.ssh
