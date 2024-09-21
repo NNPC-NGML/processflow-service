@@ -20,6 +20,9 @@ class ProcessFlow extends Model
         'frequency_for',
         'day',
         'week',
+        "start_user_designation",
+        "start_user_department",
+        "start_user_unit",
     ];
     protected $casts = [
         'status' => 'boolean',

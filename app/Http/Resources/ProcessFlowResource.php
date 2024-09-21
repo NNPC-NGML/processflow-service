@@ -39,10 +39,13 @@ class ProcessFlowResource extends JsonResource
             'name' => $this->name,
             'start_step_id' => $this->start_step_id,
             'frequency' => $this->frequency,
-            'status' => (boolean) $this->status,
+            'status' => (bool) $this->status,
             'frequency_for' => $this->frequency_for,
             'day' => $this->day,
             'week' => $this->week,
+            "start_user_designation" => $this->start_user_designation,
+            "start_user_department" => $this->start_user_department,
+            "start_user_unit" => $this->start_user_unit,
             'steps' => ProcessFlowStepResource::collection(
                 $this->steps
             ),

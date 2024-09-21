@@ -31,6 +31,9 @@ class ProcessFlowFactory extends Factory
             // 'day'           => $startDate->dayOfWeek,
             'day' => $this->faker->dayOfWeek,
             'week' => $weekString,
+            "start_user_designation" => 1,
+            "start_user_department" => 1,
+            "start_user_unit" => 1,
 
         ];
     }
