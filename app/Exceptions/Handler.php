@@ -2,8 +2,11 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Auth\AuthenticationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -26,5 +29,45 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($this->isApiRequest($request)) {
+            return $this->handleApiException($request, $exception);
+        }
+
+        return parent::render($request, $exception);
+    }
+
+    private function isApiRequest($request): bool
+    {
+        return $request->is('api/*') || $request->expectsJson();
+    }
+
+    private function handleApiException($request, Throwable $exception): JsonResponse
+    {
+        if ($exception instanceof AuthenticationException) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated.',
+            ], 401);
+        }
+
+        $statusCode = $exception instanceof HttpException ? $exception->getStatusCode() : 500;
+
+        $response = [
+            'success' => false,
+            'message' => $exception->getMessage(),
+        ];
+        //TODO: set debugger falls for production
+        if (config('app.debug')) {
+            $response['exception'] = get_class($exception);
+            $response['file'] = $exception->getFile();
+            $response['line'] = $exception->getLine();
+            $response['trace'] = $exception->getTrace();
+        }
+
+        return response()->json($response, $statusCode);
     }
 }

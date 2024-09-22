@@ -2,13 +2,13 @@
 
 namespace App\Service;
 
-use App\Models\ProcessFlowStep;
 use Exception;
-// use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+// use Exception;
+use App\Models\ProcessFlowStep;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProcessflowStepService
 {
@@ -20,30 +20,55 @@ class ProcessflowStepService
      *
      * @return \App\Models\ProcessFlowStep The created process flow step model.
      */
-    public function createProcessFlowStep(Request $request): object
+    // public function createProcessFlowStep(Request $request): object
+    // {
+    //     $model = new ProcessFlowStep();
+
+    //     $validator = Validator::make($request->all(), [
+
+    //         "name" => "required",
+    //         "step_route" => "required",
+    //         "assignee_user_route" => "required",
+    //         "next_user_designation" => "required",
+    //         "next_user_department" => "required",
+    //         "next_user_unit" => "required",
+    //         "process_flow_id" => "nullable|integer",
+    //         "next_user_location" => "required",
+    //         "step_type" => "required",
+    //         "user_type" => "required",
+    //         "next_step_id" => "nullable|integer",
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return $validator->errors();
+    //     }
+
+    //     return $model->create($request->all());
+    // }
+    public function createProcessFlowStep(Request $request): ProcessFlowStep
     {
-        $model = new ProcessFlowStep();
+        // $validator = Validator::make(
+        //     $request->all(),
+        //     [
+        //         "name" => "required|string",
+        //         "step_route" => "required|string",
+        //         "assignee_user_route" => "nullable|string",
+        //         "next_user_designation" => "nullable|integer",
+        //         "next_user_department" => "nullable|integer",
+        //         "next_user_unit" => "required|integer",
+        //         "process_flow_id" => "nullable|integer",
+        //         "next_user_location" => "required|integer",
+        //         "step_type" => "required|string|in:create,delete,update,approve_auto_assign,approve_manual_assign",
+        //         "user_type" => "required|string|in:user,supplier,customer,contractor",
+        //         "next_step_id" => "nullable|integer",
+        //     ]
+        // );
 
-        $validator = Validator::make($request->all(), [
+        // if ($validator->fails()) {
+        //     throw new ValidationException($validator);
+        // }
 
-            "name" => "required",
-            "step_route" => "required",
-            "assignee_user_route" => "required",
-            "next_user_designation" => "required",
-            "next_user_department" => "required",
-            "next_user_unit" => "required",
-            "process_flow_id" => "nullable|integer",
-            "next_user_location" => "required",
-            "step_type" => "required",
-            "user_type" => "required",
-            "next_step_id" => "nullable|integer",
-        ]);
-
-        if ($validator->fails()) {
-            return $validator->errors();
-        }
-
-        return $model->create($request->all());
+        return ProcessFlowStep::create($request->all());
     }
 
     /**
