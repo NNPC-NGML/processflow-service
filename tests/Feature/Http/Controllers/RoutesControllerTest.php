@@ -58,6 +58,7 @@ class RoutesControllerTest extends TestCase
                     "name",
                     "link",
                     "status",
+                    "dynamic_content"
                 ],
 
             ],
@@ -78,6 +79,7 @@ class RoutesControllerTest extends TestCase
                     "name",
                     "link",
                     "status",
+                    "dynamic_content"
                 ],
 
             ],
@@ -106,7 +108,8 @@ class RoutesControllerTest extends TestCase
             "data" => [
                 "name",
                 "link",
-                "status"
+                "status",
+                "dynamic_content"
             ]
         ]);
     }

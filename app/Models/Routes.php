@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Routes extends Model
 {
@@ -12,6 +12,6 @@ class Routes extends Model
         'name',
         'link',
         'status',
+        'dynamic_content'
     ];
-
 }
