@@ -103,7 +103,7 @@ class ProcessflowStepService
             'step_route' => 'sometimes|string',
             'assignee_user_route' => 'sometimes|integer',
             'next_user_designation' => 'sometimes|integer',
-            'next_user_department' => 'sometimes|string',
+            'next_user_department' => 'sometimes|integer',
             'process_flow_id' => 'sometimes|integer',
             'step_type' => 'sometimes|in:create,delete,update,approve_auto_assign,approve_manual_assign',
             'user_type' => 'sometimes|in:user,supplier,customer,contractor',

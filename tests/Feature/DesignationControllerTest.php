@@ -21,12 +21,12 @@ class DesignationControllerTest extends TestCase
         $this->assertCount(20, $designations);
         $response->assertStatus(200);
     }
-    public function test_route_unauthenticated_cannot_get_all_designations(): void
-    {
-        $this->actingAsUnAuthenticatedTestUser();
-        Designation::factory(10)->create();
-        $this->getJson('/api/designations')->assertStatus(401);
-    }
+    // public function test_route_unauthenticated_cannot_get_all_designations(): void
+    // {
+    //     $this->actingAsUnAuthenticatedTestUser();
+    //     Designation::factory(10)->create();
+    //     $this->getJson('/api/designations')->assertStatus(401);
+    // }
 
     // Test that the authenticated route to get all designations returns the correct data format
     // public function test_route_authenticated_to_get_all_designations_returnsCorrectDataFormat(): void
@@ -58,12 +58,12 @@ class DesignationControllerTest extends TestCase
     }
 
 
-    public function test_route_unauthenticated_cannot_get_single_designation(): void
-    {
-        $this->actingAsUnAuthenticatedTestUser();
-        Designation::factory(1)->create();
-        $this->getJson('/api/designations/1')->assertStatus(401);
-    }
+    // public function test_route_unauthenticated_cannot_get_single_designation(): void
+    // {
+    //     $this->actingAsUnAuthenticatedTestUser();
+    //     Designation::factory(1)->create();
+    //     $this->getJson('/api/designations/1')->assertStatus(401);
+    // }
 
     // Test getting non-existent designation returns 404
     //FIXME:

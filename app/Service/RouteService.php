@@ -20,6 +20,7 @@ class RouteService
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'link' => 'required|string',
+            'dynamic_content' => 'nulllable|string',
             'status' => 'required|boolean',
         ]);
 
@@ -66,6 +67,7 @@ class RouteService
         $validator = Validator::make($data->all(), [
             'name' => 'sometimes|string',
             'link' => 'sometimes|string',
+            'dynamic_content' => 'sometimes|string',
             'status' => 'sometimes|boolean',
         ]);
 

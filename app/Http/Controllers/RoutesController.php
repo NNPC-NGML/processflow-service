@@ -114,6 +114,7 @@ class RoutesController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'link' => 'required|string',
+            'dynamic_content' => 'nulllable|string',
             'status' => 'required|boolean',
         ]);
 
@@ -123,7 +124,7 @@ class RoutesController extends Controller
 
         $result = $this->routeService->createRoute($request);
 
-        RouteCreated::dispatch($result->toArray());
+        // RouteCreated::dispatch($result->toArray());
         return new RouteResource($result);
     }
 
@@ -221,7 +222,7 @@ class RoutesController extends Controller
         $model = $this->routeService->UpdateRoute($id, $request);
         if ($model) {
             $routeUpdated = $this->routeService->getRoute($id);
-             RouteUpdated::dispatch($routeUpdated->toArray());
+            RouteUpdated::dispatch($routeUpdated->toArray());
             return response()->json(["status" => "success", "message" => "Route was updated"], 200);
         }
         return response()->json(["status" => "success", "message" => "page not found."], 404);
@@ -274,7 +275,8 @@ class RoutesController extends Controller
         return response()->json(["status" => "success", "message" => "page not found."], 404);
     }
 
-    public function route(){
+    public function route()
+    {
 
         return request()->cookie('jwt');
         // $response = (new UserService)->getRequest('get', 'todos/1');

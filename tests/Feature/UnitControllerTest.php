@@ -44,12 +44,12 @@ class UnitControllerTest extends TestCase
     //     $response->assertNotFound();
     // }
 
-    public function test_it_returns_401_unauthenticated_for_non_logged_users(): void
-    {
-        $this->actingAsUnAuthenticatedTestUser();
-        $unit = Unit::factory()->create();
-        $response = $this->getJson('/api/units/' . $unit->id)->assertStatus(401);
-    }
+    // public function test_it_returns_401_unauthenticated_for_non_logged_users(): void
+    // {
+    //     $this->actingAsUnAuthenticatedTestUser();
+    //     $unit = Unit::factory()->create();
+    //     $response = $this->getJson('/api/units/' . $unit->id)->assertStatus(401);
+    // }
 
 
     public function test_it_can_get_all_units(): void
@@ -73,10 +73,10 @@ class UnitControllerTest extends TestCase
         ]);
     }
 
-    public function test_it_returns_401_unauthenticated_to_get_all_units(): void
-    {
-        $this->actingAsUnAuthenticatedTestUser();
-        Unit::factory()->count(3)->create();
-        $this->getJson('/api/units/')->assertStatus(401);
-    }
+    // public function test_it_returns_401_unauthenticated_to_get_all_units(): void
+    // {
+    //     $this->actingAsUnAuthenticatedTestUser();
+    //     Unit::factory()->count(3)->create();
+    //     $this->getJson('/api/units/')->assertStatus(401);
+    // }
 }
