@@ -15,6 +15,7 @@ class ProcessFlowHistory extends Model
         "user_id",
         "for",
         "for_id",
+        "for_site_id",
         "approval",
         "status",
     ];

@@ -10,6 +10,7 @@ use App\Jobs\Route\RouteDeleted;
 use App\Jobs\Route\RouteUpdated;
 use App\Http\Resources\RouteResource;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class RoutesController extends Controller
 {
@@ -122,8 +123,20 @@ class RoutesController extends Controller
         }
 
         $result = $this->routeService->createRoute($request);
+        $routeCreatedQueue = config("nnpcreusable.ROUTE_CREATED");
 
-        RouteCreated::dispatch($result->toArray());
+        if (is_array($routeCreatedQueue) && !empty($routeCreatedQueue)) {
+            foreach ($routeCreatedQueue as $queue) {
+                $queue = trim($queue);
+                if (!empty($queue)) {
+                    Log::info("Dispatching Route event to queue: " . $queue);
+                    RouteCreated::dispatch($result->toArray())->onQueue($queue);
+                }
+            }
+        } else {
+            RouteCreated::dispatch($result->toArray())->onQueue('automator_queue');
+        }
+
         return new RouteResource($result);
     }
 
@@ -221,7 +234,7 @@ class RoutesController extends Controller
         $model = $this->routeService->UpdateRoute($id, $request);
         if ($model) {
             $routeUpdated = $this->routeService->getRoute($id);
-             RouteUpdated::dispatch($routeUpdated->toArray());
+            RouteUpdated::dispatch($routeUpdated->toArray());
             return response()->json(["status" => "success", "message" => "Route was updated"], 200);
         }
         return response()->json(["status" => "success", "message" => "page not found."], 404);
@@ -274,7 +287,8 @@ class RoutesController extends Controller
         return response()->json(["status" => "success", "message" => "page not found."], 404);
     }
 
-    public function route(){
+    public function route()
+    {
 
         return request()->cookie('jwt');
         // $response = (new UserService)->getRequest('get', 'todos/1');

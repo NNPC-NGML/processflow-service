@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
 use Illuminate\Support\Facades\DB;
 use App\Service\ProcessFlowService;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Service\ProcessflowStepService;
 use App\Http\Resources\ProcessFlowResource;
@@ -15,6 +16,7 @@ use App\Jobs\ProcessFlow\ProcessFlowDeleted;
 use App\Jobs\ProcessFlow\ProcessFlowUpdated;
 use App\Http\Requests\StoreProcessFlowRequest;
 use App\Http\Requests\UpdateProcessFlowRequest;
+use App\Jobs\ProcessflowStep\ProcessflowStepCreated;
 
 /**
  * @OA\Tag(name="Process Flows")
@@ -129,6 +131,7 @@ class ProcessFlowController extends Controller
 
                 foreach ($steps as $index => $step) {
                     $createdStep = $this->processflowStepService->createProcessFlowStep(new Request($step));
+
                     if ($index === 0) {
                         $request['start_step_id'] = $createdStep->id;
                         $storedProcessFlow = $this->processFlowService->createProcessFlow($request);
@@ -138,12 +141,39 @@ class ProcessFlowController extends Controller
                 }
                 foreach ($createdSteps as $index => $step) {
                     $next_step_id = $index === count($createdSteps) - 1 ? null : $createdSteps[$index + 1]->id;
-                    $this->processflowStepService->updateProcessFlowStep(new Request(['process_flow_id' => $processFlowId, 'next_step_id' => $next_step_id]), $step->id);
+                    $StepDispatched = $this->processflowStepService->updateProcessFlowStep(new Request(['process_flow_id' => $processFlowId, 'next_step_id' => $next_step_id]), $step->id);
+
+                    $processflowStepCreatedQueue = config("nnpcreusable.PROCESSFLOW_STEP_CREATED");
+
+                    if (is_array($processflowStepCreatedQueue) && !empty($processflowStepCreatedQueue)) {
+                        foreach ($processflowStepCreatedQueue as $queue) {
+                            $queue = trim($queue);
+                            if (!empty($queue)) {
+                                Log::info("Dispatching Process Flow event to queue: " . $queue);
+                                ProcessflowStepCreated::dispatch($StepDispatched->toArray())->onQueue($queue);
+                            }
+                        }
+                    } else {
+                        ProcessflowStepCreated::dispatch($StepDispatched->toArray())->onQueue('automator_queue');
+                    }
                 }
             } else {
                 $storedProcessFlow = $this->processFlowService->createProcessFlow($request);
             }
-            ProcessFlowCreated::dispatch($storedProcessFlow->toArray());
+            $processflowCreatedQueue = config("nnpcreusable.PROCESSFLOW_CREATED");
+
+            if (is_array($processflowCreatedQueue) && !empty($processflowCreatedQueue)) {
+                foreach ($processflowCreatedQueue as $queue) {
+                    $queue = trim($queue);
+                    if (!empty($queue)) {
+                        Log::info("Dispatching Process Flow event to queue: " . $queue);
+                        ProcessFlowCreated::dispatch($storedProcessFlow->toArray())->onQueue($queue);
+                    }
+                }
+            } else {
+                ProcessFlowCreated::dispatch($storedProcessFlow->toArray())->onQueue('automator_queue');
+            }
+            //ProcessFlowCreated::dispatch($storedProcessFlow->toArray());
             return new ProcessFlowResource($storedProcessFlow);
         }, 5);
     }

@@ -5,6 +5,7 @@ namespace App\Jobs\FormData;
 use Illuminate\Http\Request;
 use Illuminate\Bus\Queueable;
 use App\Service\ProcessFlowService;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Service\ProcessFlowHistoryService;
@@ -47,6 +48,10 @@ class FormDataCreated implements ShouldQueue
             "process_flow_id" => $this->data["form_builder"]["process_flow_id"],
             "user_id" => $this->data["user_id"],
         ];
+        $data["for"] = $this->data["entity"];
+        $data["for_id"] = $this->data["entity_id"];
+        $data["for_site_id"] = $this->data["entity_site_id"];
+
         // if (!empty($this->data["data"]["form_field_answers"])) {
         //     $jsonStringConverted = json_decode($this->data["data"]["form_field_answers"], true);
 
@@ -71,7 +76,20 @@ class FormDataCreated implements ShouldQueue
                     $createNewHistory["user_id"] = $this->data["user_id"];
                     $createNewHistory["form_builder_id"] = $this->data["form_builder"]["id"];
                     // dispatch process flow history created
-                    ProcessFlowHistoryCreated::dispatch($createNewHistory);
+
+                    $historyCreatedQueue = config("nnpcreusable.PROCESSFLOW_HISTORY_CREATED");
+
+                    if (is_array($historyCreatedQueue) && !empty($historyCreatedQueue)) {
+                        foreach ($historyCreatedQueue as $queue) {
+                            $queue = trim($queue);
+                            if (!empty($queue)) {
+                                Log::info("Dispatching History event to queue: " . $queue);
+                                ProcessFlowHistoryCreated::dispatch($createNewHistory)->onQueue($queue);
+                            }
+                        }
+                    } else {
+                        ProcessFlowHistoryCreated::dispatch($createNewHistory)->onQueue('formbuilder_queue');
+                    }
                 }
             }
         }

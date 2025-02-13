@@ -11,7 +11,7 @@ class Routes extends Model
     protected $fillable = [
         'name',
         'link',
+        'dynamic_content',
         'status',
     ];
-
 }
