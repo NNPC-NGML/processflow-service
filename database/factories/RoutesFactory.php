@@ -19,8 +19,8 @@ class RoutesFactory extends Factory
         return [
             'name' => fake()->name,
             'link' => fake()->url,
+            'dynamic_content' => fake()->word(),
             'status' => true,
         ];
-
     }
 }

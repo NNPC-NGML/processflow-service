@@ -19,6 +19,7 @@ class RouteResource extends JsonResource
      *     @OA\Property(property="id", type="string"),
      *     @OA\Property(property="name", type="string"),
      *     @OA\Property(property="link", type="string"),
+     *     @OA\Property(property="dynamic_content", type="string"),
      *     @OA\Property(property="status", type="boolean"),
      *
      *
@@ -31,6 +32,7 @@ class RouteResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'link' => $this->link,
+            'dynamic_content' => $this->dynamic_content,
             'status' => $this->status,
         ];
     }
