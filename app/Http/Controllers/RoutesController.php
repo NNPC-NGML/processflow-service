@@ -10,6 +10,7 @@ use App\Jobs\Route\RouteDeleted;
 use App\Jobs\Route\RouteUpdated;
 use App\Http\Resources\RouteResource;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class RoutesController extends Controller
 {
@@ -123,8 +124,21 @@ class RoutesController extends Controller
         }
 
         $result = $this->routeService->createRoute($request);
+        $routeCreatedQueue = config("nnpcreusable.ROUTE_CREATED");
 
-        // RouteCreated::dispatch($result->toArray());
+        if (is_array($routeCreatedQueue) && !empty($routeCreatedQueue)) {
+            foreach ($routeCreatedQueue as $queue) {
+                $queue = trim($queue);
+                if (!empty($queue)) {
+                    Log::info("Dispatching Route event to queue: " . $queue);
+                    RouteCreated::dispatch($result->toArray())->onQueue($queue);
+                }
+            }
+        } else {
+            RouteCreated::dispatch($result->toArray())->onQueue('automator_queue');
+        }
+
+
         return new RouteResource($result);
     }
 

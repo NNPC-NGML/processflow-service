@@ -17,8 +17,9 @@ return new class extends Migration
             $table->integer("step_id")->comment();
             $table->integer("process_flow_id")->comment();
             $table->integer("user_id")->comment();
-            $table->integer("for")->comment()->nullable();
+            $table->string("for")->comment()->nullable();
             $table->integer("for_id")->comment()->nullable();
+            $table->integer("for_site_id")->comment()->nullable();
             $table->boolean("approval")->comment()->default(0);
             $table->boolean("status")->comment()->default(1);
             $table->timestamps();
